@@ -7,7 +7,7 @@ namespace Zidon\PhpPinyin;
  * * 一个基于现代 PHP (>= 7.4) 标准构建的高性能中文转拼音类库。
  * 专为现代 Web 框架 (如 CodeIgniter 4, Laravel) 设计，内存常驻，极速转换。
  *
- * @version 1.0.0
+ * @version 1.0.1
  * @author zidon
  * @copyright (c) 2024-2026, zidon
  * @license MIT
@@ -15,7 +15,8 @@ namespace Zidon\PhpPinyin;
  */
 class PhpPinyin
 {
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.0.1';
+    public const DICT_UPDATED_AT = '2026-03-29'; // 字典最后修正时间
 
     /**
      * @var array|null 静态内存字典缓存，确保单次请求只加载一次 I/O
@@ -165,6 +166,11 @@ class PhpPinyin
         $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
         foreach ($lines as $line) {
+            // 🌟 忽略注释行和空行
+            if ($line === '' || $line[0] === '#') {
+                continue;
+            }
+
             // 按照啊`a的格式切分
             $parts = explode('`', $line);
             if (isset($parts[1])) {
